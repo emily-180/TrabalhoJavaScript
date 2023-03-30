@@ -27,3 +27,12 @@ li {
 li:hover {
     background-color: #e2e2e2;
 }
+
+label {
+  display: block;
+  font: 1rem 'Fira Sans', sans-serif;
+}
+
+input, label {
+  margin: 0.4rem 0;
+}

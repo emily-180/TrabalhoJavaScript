@@ -5,15 +5,21 @@
  function adicionarElemento() {
     const novoNome = document.getElementById("txtNovoNome");
     const novoCpf = document.getElementById("txtNovoCpf");
-  
+    
     // Verificar se tem algo digitado e mostrar mensagem se necessário
     const novoAtendimento = new Atendimento();
     novoAtendimento.nome = novoNome.value;
     novoAtendimento.cpf = novoCpf.value;
     novoAtendimento.data = obterDataAtual();
     novoAtendimento.hora = obterHoraAtual();
-    if(minhaFila.enqueue(novoAtendimento) == true)
-      console.log(minhaFila.toString());
+    if(minhaFila.enqueue(novoAtendimento) == true){
+       console.log(minhaFila.toString());
+       novoNome.value="";
+       novoCpf.value="";
+       novoNome.focus(); 
+       mostrarFila();
+    }
+     
     else 
       alert("fila cheia!!");
    
@@ -22,6 +28,15 @@
     // adicionar na fila e mostrar na tela
  }
 //--------------------------------------------------------------------------------------------
+function removerElemento(){
+  if(minhaFila.isEmpty())
+      alert("Fila vazia");
+    else{
+       let retorno = minhaFila.dequeue();
+       alert("Pessoa removida: "+retorno);
+       mostrarFila();
+    }// fim else
+}
  // Função para remover o primeiro elemento da fila
  function realizarAtendimento() {
     // verificar se não está vazia antes de atender
@@ -49,6 +64,8 @@ function mostrarMensagemRemocao(pessoaAtendida) {
 //--------------------------------------------------------------------------------------------
  // Função para mostrar a  fila
  function mostrarFila() {
+    const filaElemento = document.getElementById("pessoasFila");
+    filaElemento.textContent = minhaFila.toString();   
 //
 }
 //--------------------------------------------------------------------------------------------
