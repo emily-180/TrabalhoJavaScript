@@ -28,17 +28,25 @@
     // adicionar na fila e mostrar na tela
  }
 //--------------------------------------------------------------------------------------------
+// Função para remover o primeiro elemento da fila
 function removerElemento(){
   if(minhaFila.isEmpty())
       alert("Fila vazia");
-    else{
+  else{
+      let retorno = minhaFila.dequeue();
+      alert("Pessoa removida: "+retorno);
+      mostrarFila();
+  }// fim else
+}
+//-------------------------------------------------------------------------------------------- 
+function realizarAtendimento() {
+  if(minhaFila.isEmpty())
+      alert("Fila vazia");
+  else{
        let retorno = minhaFila.dequeue();
-       alert("Pessoa removida: "+retorno);
+       mostrarMensagemRemocao(retorno);
        mostrarFila();
     }// fim else
-}
- // Função para remover o primeiro elemento da fila
- function realizarAtendimento() {
     // verificar se não está vazia antes de atender
     // mostrar dados da pessoa atendida utilizando a funcao mostrarMensagemRemocao
     
@@ -46,12 +54,13 @@ function removerElemento(){
  //--------------------------------------------------------------------------------
  function buscarCpf() {
     const cpf = document.getElementById("txtNovoCpf").value.trim(); // o trim retira os espaços em branco
-    const atendimento = new Atendimento(null,cpf); // vamos pesquisar só por CPF
+    const atendimento = new Atendimento(null, cpf); // vamos pesquisar só por CPF
+
     // para cada elemento da fila, verificar com o equals
     // Deve retornar a posição na fila e caso não seja encontrado avisar, crie um contador de posicões
     for (let item of minhaFila.itens) { // para cada elemento da fila
       if (item.equals(atendimento)) 
-        alert("Achou! Posição: " );
+        alert("Achou! Posição: " + item);
     }
    // se nao encontrar mostre mensagem
 }
