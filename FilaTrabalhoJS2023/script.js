@@ -5,69 +5,76 @@
  function adicionarElemento() {
     const novoNome = document.getElementById("txtNovoNome");
     const novoCpf = document.getElementById("txtNovoCpf");
-    
-    // Verificar se tem algo digitado e mostrar mensagem se necessário
+    if (novoNome.value === "" ||  novoCpf.value === "") {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
     const novoAtendimento = new Atendimento();
     novoAtendimento.nome = novoNome.value;
     novoAtendimento.cpf = novoCpf.value;
     novoAtendimento.data = obterDataAtual();
     novoAtendimento.hora = obterHoraAtual();
     if(minhaFila.enqueue(novoAtendimento) == true){
-       console.log(minhaFila.toString());
-       novoNome.value="";
-       novoCpf.value="";
-       novoNome.focus(); 
-       mostrarFila();
-    }
-     
-    else 
-      alert("fila cheia!!");
-   
-   
-    //set atributos do atendimento no objeto a partir dos inputs e funções
-    // adicionar na fila e mostrar na tela
+      limparCampos();
+      mostrarFila();
+    }else {
+      alert("Fila cheia!!");
+      limparCampos();
+    }     
  }
 //--------------------------------------------------------------------------------------------
 // Função para remover o primeiro elemento da fila
 function removerElemento(){
-  if(minhaFila.isEmpty())
-      alert("Fila vazia");
-  else{
-      let retorno = minhaFila.dequeue();
-      alert("Pessoa removida: "+retorno);
-      mostrarFila();
-  }// fim else
+  if(minhaFila.isEmpty()){
+    alert("Fila vazia");
+    return 0;
+  } else
+      return  minhaFila.dequeue();      
 }
 //-------------------------------------------------------------------------------------------- 
 function realizarAtendimento() {
-  if(minhaFila.isEmpty())
+  if(removerElemento == 0)
       alert("Fila vazia");
   else{
-       let retorno = minhaFila.dequeue();
+      let retorno = removerElemento();
        mostrarMensagemRemocao(retorno);
        mostrarFila();
-    }// fim else
-    // verificar se não está vazia antes de atender
-    // mostrar dados da pessoa atendida utilizando a funcao mostrarMensagemRemocao
-    
+    }
  }
  //--------------------------------------------------------------------------------
  function buscarCpf() {
     const cpf = document.getElementById("txtNovoCpf").value.trim(); // o trim retira os espaços em branco
-    const atendimento = new Atendimento(null, cpf); // vamos pesquisar só por CPF
-
-    // para cada elemento da fila, verificar com o equals
-    // Deve retornar a posição na fila e caso não seja encontrado avisar, crie um contador de posicões
-    for (let item of minhaFila.itens) { // para cada elemento da fila
-      if (item.equals(atendimento)) 
-        alert("Achou! Posição: " + item);
+    const atendimento = new Atendimento();
+    atendimento.cpf = cpf;
+    let i=0;
+    let achou= false;
+    for (let item of minhaFila.itens) { 
+      i++; // Deve retornar a posição na fila e caso não seja encontrado avisar, crie um contador de posicões
+      if (item.equals(atendimento)) { // para cada elemento da fila, verificar com o equals
+         alert("Achou! Posição: " +i);
+         limparCampos();
+         achou = true;
+         break;
+      }
     }
-   // se nao encontrar mostre mensagem
+    if(achou == false){
+      limparCampos ();
+      alert("CPF não encontrado!");
+    }
+}
+//________________________________________________________________________________________
+function limparCampos() {
+  const novoNome = document.getElementById("txtNovoNome");
+  const novoCpf = document.getElementById("txtNovoCpf");
+  novoNome.value = "";
+  novoCpf.value = "";
+  novoNome.focus();
 }
 //--------------------------------------------------------------------------------------------
 function mostrarMensagemRemocao(pessoaAtendida) {
     const lblMensagemRemocao = document.getElementById("lblMensagemRemocao");
-    lblMensagemRemocao.innerHTML ="Próximo a ser atendido(a): "+ pessoaAtendida.nome;
+    let horaRemovida = obterHoraAtual();
+    lblMensagemRemocao.innerHTML ="Próximo a ser atendido(a): "+ pessoaAtendida.nome+", chegou ás "+pessoaAtendida.hora + ", está sendo atendida ás "+ horaRemovida + " Tempo de espera: " + calcularDiferencaHoras(pessoaAtendida.hora, horaRemovida);
     lblMensagemRemocao.style.display = "block";
 }
 //--------------------------------------------------------------------------------------------
